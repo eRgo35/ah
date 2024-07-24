@@ -1,7 +1,16 @@
 [package]
 name = "ah"
 version = "0.1.0"
+authors = ["Michał Czyż <mike@c2yz.com>"]
 edition = "2021"
+
+description = "A declarative package manager for Arch Linux"
+homepage = "https://github.com/eRgo35/ah"
+repository = "https://github.com/eRgo35/ah"
+documentation = "https://github.com/eRgo35/ah"
+license = "MIT"
+keywords = ["archlinux", "declarative", "package", "aur", "paru"]
+readme = "README.md"
 
 [dependencies]
 clap = { version = "4.5.10", features = ["derive"] }
