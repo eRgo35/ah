@@ -1,27 +1,49 @@
-use clap::{Parser, Subcommand, Args};
+use clap::{Args, Parser, Subcommand};
 
-#[derive(Parser, Debug)]
-#[command(version, about, long_about = None)]
+#[derive(Parser)]
+#[command(
+    name = "ah",
+    author = "Michał Czyż",
+    version = "0.1.0",
+    about = "A declarative package manager for Arch Linux", 
+    long_about = "Arch Helper is a declarative package management tool for Arch Linux. It leverages paru or other package managers for seamless integration.")]
 pub struct Cli {
     #[command(subcommand)]
-    pub command: Option<SubCommands>,
+    pub command: Option<Commands>,
 }
 
-#[derive(Subcommand, Debug)]
-pub enum SubCommands {
-    #[command(alias = "i")]
-    Install(PackageArg),
-    #[command(alias = "u")]
-    Upgrade {},
-    #[command(alias = "s")]
-    Sync {},
-    #[command(alias = "r")]
-    Remove(PackageArg),
-    #[command(alias = "f")]
-    Find(PackageArg),
+#[derive(Subcommand)]
+pub enum Commands {
+    #[command(about = "Install packages")]
+    Install(PackageList),
+
+    #[command(about = "Upgrade packages")]
+    Upgrade {
+        #[arg(help = "Don't prompt for confirmation", default_value_t = false)]
+        noconfirm: bool
+    },
+    
+    #[command(about = "Synchronize packages")]
+    Sync {
+        #[arg(help = "Don't prompt for confirmation", default_value_t = false)]
+        noconfirm: bool
+    },
+    
+    #[command(about = "Remove packages")]
+    Remove(PackageList),
+
+    #[command(about = "Find packages")]
+    Find(Query),
 }
 
-#[derive(Args, Debug)]
-pub struct PackageArg {
-    pub package: String,
+#[derive(Args)]
+pub struct PackageList {
+    #[arg(help = "Name(s) of the package(s), separated by spaces")]
+    pub packages: Vec<String>,
+}
+
+#[derive(Args)]
+pub struct Query {
+    #[arg(help = "Search term for finding packages")]
+    pub query: Vec<String>,
 }

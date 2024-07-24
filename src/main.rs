@@ -1,17 +1,25 @@
 use clap::Parser;
+use cli::{PackageList, Query};
+use colored::Colorize;
 
 mod cli;
 mod packages;
+mod file;
 
 fn main() {
     let cli = cli::Cli::parse();
 
-    match cli.command {
-        Some(cli::SubCommands::Install(arg)) => packages::install(&arg.package),
-        Some(cli::SubCommands::Upgrade {}) => packages::upgrade(),
-        Some(cli::SubCommands::Sync {}) => packages::sync(),
-        Some(cli::SubCommands::Remove(arg)) => packages::remove(&arg.package),
-        Some(cli::SubCommands::Find(arg)) => packages::find(&arg.package),
-        None => packages::sync(),
+    let result = match cli.command {
+        Some(cli::Commands::Install(PackageList { packages })) => packages::install(packages),
+        Some(cli::Commands::Upgrade { noconfirm }) => packages::upgrade(noconfirm),
+        Some(cli::Commands::Sync { noconfirm }) => packages::sync(noconfirm),
+        Some(cli::Commands::Remove(PackageList { packages })) => packages::remove(packages),
+        Some(cli::Commands::Find(Query { query })) => packages::find(query),
+        None => packages::rebuild(true),
+    };
+
+    if let Err(err) = result {
+        eprintln!("{} {}", "::".bold().red(), err.to_string().bold());
+        std::process::exit(1);
     }
 }
