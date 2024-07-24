@@ -3,8 +3,8 @@ use cli::{PackageList, Query};
 use colored::Colorize;
 
 mod cli;
-mod packages;
 mod file;
+mod packages;
 
 fn main() {
     let cli = cli::Cli::parse();

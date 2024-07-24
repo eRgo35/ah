@@ -1,48 +1,57 @@
 use colored::Colorize;
-use std::process::{Command, Stdio};
 use std::io::Write;
+use std::process::{Command, Stdio};
 
 use crate::file;
-use crate::packages::get_package_path;
+use crate::packages::{ask_confirmation, get_package_path};
 
 const PACKAGE_MANAGER: &str = "paru";
 
 pub fn sync(noconfirm: bool) -> Result<(), Box<dyn std::error::Error>> {
-  println!("{} {}", "::".bold().green(), "Syncing packages...".bold());
+    println!("{} {}", "::".bold().green(), "Syncing packages...".bold());
 
-  let packages = file::read_packages(get_package_path());
+    if !ask_confirmation()? {
+        return Err("Operation aborted".into());
+    }
 
-  let packages = packages.into_iter()
-      .filter(|p| !p.contains("#") && !p.is_empty())
-      .collect::<Vec<String>>();
+    let packages = file::read_packages(get_package_path());
 
-  let noconfirm = if noconfirm { "--noconfirm" } else { "--confirm" };
+    let packages = packages
+        .into_iter()
+        .filter(|p| !p.contains("#") && !p.is_empty())
+        .collect::<Vec<String>>();
 
-  let mut child = Command::new(PACKAGE_MANAGER)
-      .arg("--color")
-      .arg("always")
-      .arg("-S")
-      .arg("--needed")
-      .arg(noconfirm)
-      .arg("-")
-      .stdin(Stdio::piped())
-      .stdout(Stdio::inherit())
-      .stderr(Stdio::inherit())
-      .spawn()
-      .expect("Failed to execute command");
+    let noconfirm = if noconfirm {
+        "--noconfirm"
+    } else {
+        "--confirm"
+    };
 
-  if let Some(mut stdin) = child.stdin.take() {
-      for package in packages {
-        writeln!(stdin, "{}", package).unwrap();
-      }
-  }
+    let mut child = Command::new(PACKAGE_MANAGER)
+        .arg("--color")
+        .arg("always")
+        .arg("-S")
+        .arg("--needed")
+        .arg(noconfirm)
+        .arg("-")
+        .stdin(Stdio::piped())
+        .stdout(Stdio::inherit())
+        .stderr(Stdio::inherit())
+        .spawn()
+        .expect("Failed to execute command");
 
-  let status = child.wait().expect("Failed to wait on child");
+    if let Some(mut stdin) = child.stdin.take() {
+        for package in packages {
+            writeln!(stdin, "{}", package).unwrap();
+        }
+    }
 
-  if !status.success() {
-    return Err("Failed to sync packages".into());
-  }
+    let status = child.wait().expect("Failed to wait on child");
 
-  println!("{} {}", "::".bold().green(), "Packages synced".bold());
-  Ok(())
+    if !status.success() {
+        return Err("Failed to sync packages".into());
+    }
+
+    println!("{} {}", "::".bold().green(), "Packages synced".bold());
+    Ok(())
 }

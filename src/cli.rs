@@ -5,8 +5,9 @@ use clap::{Args, Parser, Subcommand};
     name = "ah",
     author = "Michał Czyż",
     version = "0.1.0",
-    about = "A declarative package manager for Arch Linux", 
-    long_about = "Arch Helper is a declarative package management tool for Arch Linux. It leverages paru or other package managers for seamless integration.")]
+    about = "A declarative package manager for Arch Linux",
+    long_about = "Arch Helper is a declarative package management tool for Arch Linux. It leverages paru or other package managers for seamless integration."
+)]
 pub struct Cli {
     #[command(subcommand)]
     pub command: Option<Commands>,
@@ -14,25 +15,25 @@ pub struct Cli {
 
 #[derive(Subcommand)]
 pub enum Commands {
-    #[command(about = "Install packages")]
+    #[command(alias = "i", about = "Install packages")]
     Install(PackageList),
 
-    #[command(about = "Upgrade packages")]
+    #[command(alias = "u", about = "Upgrade packages")]
     Upgrade {
         #[arg(help = "Don't prompt for confirmation", default_value_t = false)]
-        noconfirm: bool
+        noconfirm: bool,
     },
-    
-    #[command(about = "Synchronize packages")]
+
+    #[command(alias = "s", about = "Synchronize packages")]
     Sync {
         #[arg(help = "Don't prompt for confirmation", default_value_t = false)]
-        noconfirm: bool
+        noconfirm: bool,
     },
-    
-    #[command(about = "Remove packages")]
+
+    #[command(alias = "r", about = "Remove packages")]
     Remove(PackageList),
 
-    #[command(about = "Find packages")]
+    #[command(alias = "f", about = "Find packages")]
     Find(Query),
 }
 
