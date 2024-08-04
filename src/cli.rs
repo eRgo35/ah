@@ -35,6 +35,9 @@ pub enum Commands {
 
     #[command(alias = "f", about = "Find packages")]
     Find(Query),
+
+    #[command(alias = "fi", about = "Find and install packages")]
+    ChooseInstall(Query),
 }
 
 #[derive(Args)]

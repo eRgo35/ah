@@ -1,9 +1,7 @@
 use colored::Colorize;
 use std::process::Command;
 
-use crate::packages::ask_confirmation;
-
-const PACKAGE_MANAGER: &str = "paru";
+use crate::packages::{ask_confirmation, PACKAGE_MANAGER};
 
 pub fn upgrade(noconfirm: bool) -> Result<(), Box<dyn std::error::Error>> {
     println!("{} {}", "::".bold().green(), "Upgrading packages...".bold());

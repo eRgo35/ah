@@ -1,7 +1,7 @@
 use colored::Colorize;
 use std::process::Command;
 
-const PACKAGE_MANAGER: &str = "paru";
+use crate::packages::PACKAGE_MANAGER;
 
 pub fn find(query: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
     println!(

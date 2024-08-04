@@ -2,6 +2,7 @@ use colored::Colorize;
 use std::io::{self, Write};
 use std::path::PathBuf;
 
+pub mod choose_install;
 pub mod find;
 pub mod install;
 pub mod rebuild;
@@ -9,12 +10,15 @@ pub mod remove;
 pub mod sync;
 pub mod upgrade;
 
+pub use choose_install::choose_install;
 pub use find::find;
 pub use install::install;
 pub use rebuild::rebuild;
 pub use remove::remove;
 pub use sync::sync;
 pub use upgrade::upgrade;
+
+const PACKAGE_MANAGER: &str = "paru";
 
 fn get_package_path() -> PathBuf {
     let home_dir = std::env::var("HOME").unwrap();

@@ -15,7 +15,8 @@ fn main() {
         Some(cli::Commands::Sync { noconfirm }) => packages::sync(noconfirm),
         Some(cli::Commands::Remove(PackageList { packages })) => packages::remove(packages),
         Some(cli::Commands::Find(Query { query })) => packages::find(query),
-        None => packages::rebuild(true),
+        Some(cli::Commands::ChooseInstall(Query { query })) => packages::choose_install(query),
+        None => packages::upgrade(true),
     };
 
     if let Err(err) = result {

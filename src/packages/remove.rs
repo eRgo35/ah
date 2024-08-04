@@ -1,9 +1,8 @@
+use crate::packages::PACKAGE_MANAGER;
 use crate::{file, packages::get_package_path};
 use colored::Colorize;
 use std::io::Write;
 use std::process::{Command, Stdio};
-
-const PACKAGE_MANAGER: &str = "paru";
 
 pub fn remove(unwanted_packages: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
     println!("{} {}", "::".bold().green(), "Removing packages...".bold());

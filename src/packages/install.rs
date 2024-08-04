@@ -1,9 +1,8 @@
+use crate::packages::PACKAGE_MANAGER;
 use crate::{file, packages::get_package_path};
 use colored::Colorize;
 use std::io::Write;
 use std::process::{Command, Stdio};
-
-const PACKAGE_MANAGER: &str = "paru";
 
 pub fn install(new_packages: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
     println!(
@@ -24,7 +23,6 @@ pub fn install(new_packages: Vec<String>) -> Result<(), Box<dyn std::error::Erro
         .arg("always")
         .arg("-S")
         .arg("--needed")
-        // .arg(noconfirm)
         .arg("-")
         .stdin(Stdio::piped())
         .stdout(Stdio::inherit())

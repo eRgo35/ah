@@ -3,9 +3,7 @@ use std::io::Write;
 use std::process::{Command, Stdio};
 
 use crate::file;
-use crate::packages::{ask_confirmation, get_package_path};
-
-const PACKAGE_MANAGER: &str = "paru";
+use crate::packages::{ask_confirmation, get_package_path, PACKAGE_MANAGER};
 
 pub fn sync(noconfirm: bool) -> Result<(), Box<dyn std::error::Error>> {
     println!("{} {}", "::".bold().green(), "Syncing packages...".bold());
