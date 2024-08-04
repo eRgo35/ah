@@ -23,13 +23,23 @@ $ rustup default stable
 ```
 
 Clone this repo
+
 ```sh
-$ git clone https://github.com/eRgo35/ah 
+$ git clone https://github.com/eRgo35/ah
 ```
+
 Change directory
 
 ```sh
 $ cd ah
+```
+
+```sh
+$ cargo aur
+```
+
+```sh
+$ cd target/cargo-aur
 ```
 
 Install package

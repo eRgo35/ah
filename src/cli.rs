@@ -1,10 +1,12 @@
 use clap::{Args, Parser, Subcommand};
 
+const VERSION: Option<&str> = option_env!("CARGO_PKG_VERSION");
+
 #[derive(Parser)]
 #[command(
     name = "ah",
     author = "Michał Czyż",
-    version = "0.1.0",
+    version = VERSION.unwrap_or("unknown"),
     about = "A declarative package manager for Arch Linux",
     long_about = "Arch Helper is a declarative package management tool for Arch Linux. It leverages paru or other package managers for seamless integration."
 )]
