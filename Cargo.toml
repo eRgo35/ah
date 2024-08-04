@@ -8,8 +8,8 @@ description = "A declarative package manager for Arch Linux"
 homepage = "https://github.com/eRgo35/ah"
 repository = "https://github.com/eRgo35/ah"
 documentation = "https://github.com/eRgo35/ah"
-license = "MIT"
 keywords = ["archlinux", "declarative", "package", "aur", "paru"]
+license = "MIT"
 readme = "README.md"
 
 [dependencies]
