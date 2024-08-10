@@ -23,7 +23,6 @@ pub fn read_packages(path: PathBuf) -> Vec<String> {
 
 pub fn append_package(path: PathBuf, package: &str) {
     let mut file = OpenOptions::new()
-        .write(true)
         .append(true)
         .open(path)
         .expect("Failed to open file");

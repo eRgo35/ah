@@ -16,7 +16,7 @@ fn main() {
         Some(cli::Commands::Remove(PackageList { packages })) => packages::remove(packages),
         Some(cli::Commands::Find(Query { query })) => packages::find(query),
         Some(cli::Commands::ChooseInstall(Query { query })) => packages::choose_install(query),
-        None => packages::upgrade(true),
+        None => packages::full_upgrade(true),
     };
 
     if let Err(err) = result {

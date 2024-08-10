@@ -4,6 +4,7 @@ use std::path::PathBuf;
 
 pub mod choose_install;
 pub mod find;
+pub mod full_upgrade;
 pub mod install;
 pub mod rebuild;
 pub mod remove;
@@ -12,12 +13,14 @@ pub mod upgrade;
 
 pub use choose_install::choose_install;
 pub use find::find;
+pub use full_upgrade::full_upgrade;
 pub use install::install;
 pub use rebuild::rebuild;
 pub use remove::remove;
 pub use sync::sync;
 pub use upgrade::upgrade;
 
+const SYSTEM_UPDATER: &str = "topgrade";
 const PACKAGE_MANAGER: &str = "paru";
 
 fn get_package_path() -> PathBuf {
@@ -27,11 +30,7 @@ fn get_package_path() -> PathBuf {
 }
 
 fn ask_confirmation() -> Result<bool, io::Error> {
-    print!(
-        "{} {}",
-        "::".bold().blue(),
-        "Do you want to continue? [Y/n] "
-    );
+    print!("{} Do you want to continue? [Y/n] ", "::".bold().blue());
     io::stdout().flush()?;
 
     let mut input = String::new();
