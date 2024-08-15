@@ -1,5 +1,5 @@
 [package]
-name = "ah"
+name = "ah-pkg"
 version = "0.3.0"
 authors = ["Michał Czyż <mike@c2yz.com>"]
 edition = "2021"
@@ -11,6 +11,10 @@ documentation = "https://github.com/eRgo35/ah"
 keywords = ["archlinux", "declarative", "package", "aur", "paru"]
 license = "MIT"
 readme = "README.md"
+
+[[bin]]
+path = "src/main.rs"
+name = "ah"
 
 [dependencies]
 clap = { version = "4.5.10", features = ["derive"] }

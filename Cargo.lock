@@ -3,7 +3,7 @@
 version = 3
 
 [[package]]
-name = "ah"
+name = "ah-pkg"
 version = "0.3.0"
 dependencies = [
  "clap",
