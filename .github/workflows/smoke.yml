@@ -1,0 +1,34 @@
+name: Smoke
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+concurrency:
+  group: smoke-${{ github.ref }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install build deps
+        run: |
+          pacman -Syu --noconfirm rustup base-devel git
+          rustup default stable
+      - name: Install ah
+        run: |
+          cargo build --release
+          install -Dm755 target/release/ah /usr/bin/ah
+      - name: ah --version
+        run: ah --version
+      - name: ah find (must not panic)
+        run: ah find nonexistent-package-xyz | head -5
+      - name: ah sync --dry-run (must print, must not error)
+        run: |
+          mkdir -p "$HOME"
+          touch "$HOME/packages"
+          ah sync --dry-run
