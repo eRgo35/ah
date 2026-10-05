@@ -1,3 +1,7 @@
+[lib]
+name = "ah_pkg"
+path = "src/lib.rs"
+
 [package]
 name = "ah-pkg"
 version = "0.3.1"

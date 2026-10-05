@@ -3,7 +3,7 @@ use std::io::Write;
 use std::process::{Command, Stdio};
 
 use crate::file;
-use crate::packages::{ask_confirmation, get_package_path, PACKAGE_MANAGER};
+use crate::packages::{ask_confirmation, get_package_path, noconfirm_arg, PACKAGE_MANAGER};
 
 pub fn rebuild(noconfirm: bool) -> Result<(), Box<dyn std::error::Error>> {
     println!(
@@ -23,18 +23,12 @@ pub fn rebuild(noconfirm: bool) -> Result<(), Box<dyn std::error::Error>> {
         .filter(|p| !p.contains("#") && !p.is_empty())
         .collect::<Vec<String>>();
 
-    let noconfirm = if noconfirm {
-        "--noconfirm"
-    } else {
-        "--confirm"
-    };
-
     let mut child = Command::new(PACKAGE_MANAGER)
         .arg("--color")
         .arg("always")
         .arg("-Syu")
         .arg("--needed")
-        .arg(noconfirm)
+        .args(noconfirm_arg(noconfirm))
         .arg("-")
         .stdin(Stdio::piped())
         .stdout(Stdio::inherit())

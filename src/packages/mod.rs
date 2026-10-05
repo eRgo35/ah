@@ -29,6 +29,14 @@ fn get_package_path() -> PathBuf {
     PathBuf::from(home_dir).join("packages")
 }
 
+pub fn noconfirm_arg(noconfirm: bool) -> Vec<&'static str> {
+    if noconfirm {
+        vec!["--noconfirm"]
+    } else {
+        Vec::new()
+    }
+}
+
 fn ask_confirmation() -> Result<bool, io::Error> {
     print!("{} Do you want to continue? [Y/n] ", "::".bold().blue());
     io::stdout().flush()?;
