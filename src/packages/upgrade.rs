@@ -2,10 +2,10 @@ use colored::Colorize;
 
 use crate::packages::{ask_confirmation, noconfirm_arg, run_command, PACKAGE_MANAGER};
 
-pub fn upgrade(noconfirm: bool) -> Result<(), Box<dyn std::error::Error>> {
+pub fn upgrade(noconfirm: bool, assume_yes: bool) -> Result<(), Box<dyn std::error::Error>> {
     println!("{} {}", "::".bold().green(), "Upgrading packages...".bold());
 
-    if !ask_confirmation()? {
+    if !ask_confirmation(assume_yes)? {
         return Err("Operation aborted".into());
     }
 

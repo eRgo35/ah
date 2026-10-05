@@ -5,10 +5,10 @@ use crate::packages::{
     ask_confirmation, get_package_path, noconfirm_arg, run_command_stdin, PACKAGE_MANAGER,
 };
 
-pub fn sync(noconfirm: bool) -> Result<(), Box<dyn std::error::Error>> {
+pub fn sync(noconfirm: bool, assume_yes: bool) -> Result<(), Box<dyn std::error::Error>> {
     println!("{} {}", "::".bold().green(), "Syncing packages...".bold());
 
-    if !ask_confirmation()? {
+    if !ask_confirmation(assume_yes)? {
         return Err("Operation aborted".into());
     }
 

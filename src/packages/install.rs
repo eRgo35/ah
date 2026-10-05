@@ -3,14 +3,17 @@ use crate::packages::PACKAGE_MANAGER;
 use crate::{file, packages::get_package_path};
 use colored::Colorize;
 
-pub fn install(new_packages: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
+pub fn install(
+    new_packages: Vec<String>,
+    assume_yes: bool,
+) -> Result<(), Box<dyn std::error::Error>> {
     println!(
         "{} {}",
         "::".bold().green(),
         "Installing packages...".bold()
     );
 
-    if !confirm_destructive(&format!("install {}", new_packages.join(" ")))? {
+    if !confirm_destructive(&format!("install {}", new_packages.join(" ")), assume_yes)? {
         return Err("Operation aborted".into());
     }
 

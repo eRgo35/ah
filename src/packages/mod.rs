@@ -36,18 +36,28 @@ pub fn noconfirm_arg(noconfirm: bool) -> Vec<&'static str> {
     }
 }
 
-fn ask_confirmation() -> Result<bool, io::Error> {
+/// Returns true if we should actually prompt the user. `assume_yes`
+/// (from `--yes`) short-circuits this.
+pub fn should_confirm(assume_yes: bool) -> bool {
+    !assume_yes
+}
+
+pub fn ask_confirmation(assume_yes: bool) -> Result<bool, io::Error> {
+    if !should_confirm(assume_yes) {
+        return Ok(true);
+    }
     print!("{} Do you want to continue? [Y/n] ", "::".bold().blue());
     io::stdout().flush()?;
-
     let mut input = String::new();
     io::stdin().read_line(&mut input)?;
-
     let input = input.trim().to_lowercase();
     Ok(input.is_empty() || input == "y")
 }
 
-pub fn confirm_destructive(action: &str) -> Result<bool, io::Error> {
+pub fn confirm_destructive(action: &str, assume_yes: bool) -> Result<bool, io::Error> {
+    if !should_confirm(assume_yes) {
+        return Ok(true);
+    }
     print!(
         "{} About to {}. Continue? [Y/n] ",
         "::".bold().red(),

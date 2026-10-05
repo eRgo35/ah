@@ -3,10 +3,16 @@ use crate::packages::PACKAGE_MANAGER;
 use crate::{file, packages::get_package_path};
 use colored::Colorize;
 
-pub fn remove(unwanted_packages: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
+pub fn remove(
+    unwanted_packages: Vec<String>,
+    assume_yes: bool,
+) -> Result<(), Box<dyn std::error::Error>> {
     println!("{} {}", "::".bold().green(), "Removing packages...".bold());
 
-    if !confirm_destructive(&format!("remove {}", unwanted_packages.join(" ")))? {
+    if !confirm_destructive(
+        &format!("remove {}", unwanted_packages.join(" ")),
+        assume_yes,
+    )? {
         return Err("Operation aborted".into());
     }
 

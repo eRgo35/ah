@@ -11,6 +11,8 @@ const VERSION: Option<&str> = option_env!("CARGO_PKG_VERSION");
     long_about = "Arch Helper is a declarative package management tool for Arch Linux. It leverages paru or other package managers for seamless integration."
 )]
 pub struct Cli {
+    #[arg(long, global = true, help = "Assume yes to all prompts")]
+    pub yes: bool,
     #[command(subcommand)]
     pub command: Option<Commands>,
 }
