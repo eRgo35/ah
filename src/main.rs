@@ -9,8 +9,12 @@ fn main() {
         Some(cli::Commands::Install(cli::PackageList { packages })) => {
             packages::install(packages, cli.yes)
         }
-        Some(cli::Commands::Upgrade { noconfirm }) => packages::upgrade(noconfirm, cli.yes),
-        Some(cli::Commands::Sync { noconfirm }) => packages::sync(noconfirm, cli.yes),
+        Some(cli::Commands::Upgrade { noconfirm, dry_run }) => {
+            packages::upgrade(noconfirm, dry_run, cli.yes)
+        }
+        Some(cli::Commands::Sync { noconfirm, dry_run }) => {
+            packages::sync(noconfirm, dry_run, cli.yes)
+        }
         Some(cli::Commands::Remove(cli::PackageList { packages })) => {
             packages::remove(packages, cli.yes)
         }

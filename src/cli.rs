@@ -26,12 +26,16 @@ pub enum Commands {
     Upgrade {
         #[arg(help = "Don't prompt for confirmation", default_value_t = false)]
         noconfirm: bool,
+        #[arg(long, help = "Print what would happen, don't do it")]
+        dry_run: bool,
     },
 
     #[command(alias = "s", about = "Synchronize packages")]
     Sync {
         #[arg(help = "Don't prompt for confirmation", default_value_t = false)]
         noconfirm: bool,
+        #[arg(long, help = "Print what would happen, don't do it")]
+        dry_run: bool,
     },
 
     #[command(alias = "r", about = "Remove packages")]

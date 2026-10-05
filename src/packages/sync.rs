@@ -5,14 +5,25 @@ use crate::packages::{
     ask_confirmation, get_package_path, noconfirm_arg, run_command_stdin, PACKAGE_MANAGER,
 };
 
-pub fn sync(noconfirm: bool, assume_yes: bool) -> Result<(), Box<dyn std::error::Error>> {
+pub fn sync(
+    noconfirm: bool,
+    dry_run: bool,
+    assume_yes: bool,
+) -> Result<(), Box<dyn std::error::Error>> {
     println!("{} {}", "::".bold().green(), "Syncing packages...".bold());
+
+    let packages = file::read_packages_filtered(get_package_path());
+
+    if dry_run {
+        for pkg in &packages {
+            println!("Would install: {}", pkg);
+        }
+        return Ok(());
+    }
 
     if !ask_confirmation(assume_yes)? {
         return Err("Operation aborted".into());
     }
-
-    let packages = file::read_packages_filtered(get_package_path());
 
     let input = packages.join("\n");
 
