@@ -1,6 +1,7 @@
 use colored::Colorize;
 
-use crate::packages::{run_command_stdin, PACKAGE_MANAGER};
+use crate::file;
+use crate::packages::{get_package_path, run_command_stdin, PACKAGE_MANAGER};
 
 pub fn choose_install(query: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
     println!(
@@ -23,11 +24,10 @@ pub fn choose_install(query: Vec<String>) -> Result<(), Box<dyn std::error::Erro
 
     println!("{} {}", "::".bold().green(), "Packages installed".bold());
 
-    println!(
-        "{} {}",
-        "::".bold().red(),
-        "Package index has not been updated!".bold()
-    );
+    for word in &query {
+        file::append_package(get_package_path(), word)?;
+    }
+    println!("{} {}", "::".bold().blue(), "Package index updated".bold());
 
     Ok(())
 }
