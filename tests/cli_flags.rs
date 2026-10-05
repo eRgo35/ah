@@ -1,4 +1,4 @@
-use ah_pkg::packages::noconfirm_arg;
+use ah_pkg::packages::{noconfirm_arg, topgrade_argv};
 
 #[test]
 fn test_noconfirm_arg_true() {
@@ -8,4 +8,10 @@ fn test_noconfirm_arg_true() {
 #[test]
 fn test_noconfirm_arg_false() {
     assert_eq!(noconfirm_arg(false), Vec::<&str>::new());
+}
+
+#[test]
+fn topgrade_argv_omits_flag_when_not_confirming() {
+    assert_eq!(topgrade_argv(true), vec!["-y"]);
+    assert_eq!(topgrade_argv(false), Vec::<&str>::new());
 }

@@ -1,8 +1,8 @@
 use colored::Colorize;
 
-use crate::packages::{ask_confirmation, run_command, SYSTEM_UPDATER};
+use crate::packages::{ask_confirmation, run_command, topgrade_argv, SYSTEM_UPDATER};
 
-pub fn full_upgrade(noconfirm: bool, assume_yes: bool) -> Result<(), Box<dyn std::error::Error>> {
+pub fn full_upgrade(assume_yes: bool) -> Result<(), Box<dyn std::error::Error>> {
     println!(
         "{} {}",
         "::".bold().green(),
@@ -13,12 +13,10 @@ pub fn full_upgrade(noconfirm: bool, assume_yes: bool) -> Result<(), Box<dyn std
         return Err("Operation aborted".into());
     }
 
-    let noconfirm_arg = if noconfirm { "-y" } else { "" };
-
-    let code = run_command(SYSTEM_UPDATER, &[noconfirm_arg])?;
-
+    let argv = topgrade_argv(assume_yes);
+    let code = run_command(SYSTEM_UPDATER, &argv)?;
     if code != 0 {
-        return Err("System upgrade failed".into());
+        return Err(format!("topgrade exited with {}", code).into());
     }
 
     println!("{} {}", "::".bold().green(), "System upgraded".bold());

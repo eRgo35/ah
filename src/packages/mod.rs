@@ -19,8 +19,8 @@ pub use remove::remove;
 pub use sync::sync;
 pub use upgrade::upgrade;
 
-const SYSTEM_UPDATER: &str = "topgrade";
-const PACKAGE_MANAGER: &str = "paru";
+pub const SYSTEM_UPDATER: &str = "topgrade";
+pub const PACKAGE_MANAGER: &str = "paru";
 
 fn get_package_path() -> PathBuf {
     let home_dir = std::env::var("HOME").unwrap();
@@ -31,6 +31,16 @@ fn get_package_path() -> PathBuf {
 pub fn noconfirm_arg(noconfirm: bool) -> Vec<&'static str> {
     if noconfirm {
         vec!["--noconfirm"]
+    } else {
+        Vec::new()
+    }
+}
+
+/// Returns the argv slice for `topgrade`. `-y` to skip prompts,
+/// or empty when the user didn't pass --yes.
+pub fn topgrade_argv(assume_yes: bool) -> Vec<&'static str> {
+    if assume_yes {
+        vec!["-y"]
     } else {
         Vec::new()
     }
