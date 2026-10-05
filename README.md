@@ -50,7 +50,7 @@ $ cargo build --release
 
 ```txt
 $ ah --help
-Arch Helper is a declarative package management tool for Arch Linux. It leverages paru or other package managers for seamless integration.
+Arch Helper is a declarative package management tool for Arch Linux. It wraps `paru` for package management and `topgrade` for full system upgrades.
 
 Usage: ah [COMMAND]
 
