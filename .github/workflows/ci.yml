@@ -1,8 +1,9 @@
 name: CI
 on:
   pull_request:
+    branches: [senpai]
   push:
-    branches: [main]
+    branches: [senpai]
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
