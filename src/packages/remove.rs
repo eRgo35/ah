@@ -1,9 +1,14 @@
+use crate::packages::confirm_destructive;
 use crate::packages::PACKAGE_MANAGER;
 use crate::{file, packages::get_package_path};
 use colored::Colorize;
 
 pub fn remove(unwanted_packages: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
     println!("{} {}", "::".bold().green(), "Removing packages...".bold());
+
+    if !confirm_destructive(&format!("remove {}", unwanted_packages.join(" ")))? {
+        return Err("Operation aborted".into());
+    }
 
     let mut packages = file::read_packages_filtered(get_package_path());
 

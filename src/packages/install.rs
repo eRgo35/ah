@@ -1,3 +1,4 @@
+use crate::packages::confirm_destructive;
 use crate::packages::PACKAGE_MANAGER;
 use crate::{file, packages::get_package_path};
 use colored::Colorize;
@@ -8,6 +9,10 @@ pub fn install(new_packages: Vec<String>) -> Result<(), Box<dyn std::error::Erro
         "::".bold().green(),
         "Installing packages...".bold()
     );
+
+    if !confirm_destructive(&format!("install {}", new_packages.join(" ")))? {
+        return Err("Operation aborted".into());
+    }
 
     let packages = file::read_packages_filtered(get_package_path());
 

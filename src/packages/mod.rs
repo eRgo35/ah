@@ -47,6 +47,19 @@ fn ask_confirmation() -> Result<bool, io::Error> {
     Ok(input.is_empty() || input == "y")
 }
 
+pub fn confirm_destructive(action: &str) -> Result<bool, io::Error> {
+    print!(
+        "{} About to {}. Continue? [Y/n] ",
+        "::".bold().red(),
+        action
+    );
+    io::stdout().flush()?;
+    let mut input = String::new();
+    io::stdin().read_line(&mut input)?;
+    let input = input.trim().to_lowercase();
+    Ok(input.is_empty() || input == "y")
+}
+
 /// Run a command and return its exit code (0 = success).
 pub fn run_command(bin: &str, args: &[&str]) -> Result<i32, Box<dyn std::error::Error>> {
     let status = Command::new(bin).args(args).status()?;
