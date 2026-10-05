@@ -9,12 +9,7 @@ pub fn install(new_packages: Vec<String>) -> Result<(), Box<dyn std::error::Erro
         "Installing packages...".bold()
     );
 
-    let packages = file::read_packages(get_package_path());
-
-    let packages = packages
-        .into_iter()
-        .filter(|p| !p.contains("#") && !p.is_empty())
-        .collect::<Vec<String>>();
+    let packages = file::read_packages_filtered(get_package_path());
 
     let input = new_packages.clone().join("\n");
     let args = vec!["--color", "always", "-S", "--needed", "-"];
@@ -34,7 +29,7 @@ pub fn install(new_packages: Vec<String>) -> Result<(), Box<dyn std::error::Erro
 
     for new_package in new_packages {
         if !packages.contains(&new_package) {
-            file::append_package(get_package_path(), &new_package);
+            file::append_package(get_package_path(), &new_package)?;
         }
     }
 

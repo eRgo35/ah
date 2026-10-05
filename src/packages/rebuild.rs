@@ -16,12 +16,7 @@ pub fn rebuild(noconfirm: bool) -> Result<(), Box<dyn std::error::Error>> {
         return Err("Operation aborted".into());
     }
 
-    let packages = file::read_packages(get_package_path());
-
-    let packages = packages
-        .into_iter()
-        .filter(|p| !p.contains("#") && !p.is_empty())
-        .collect::<Vec<String>>();
+    let packages = file::read_packages_filtered(get_package_path());
 
     let input = packages.join("\n");
 

@@ -5,12 +5,7 @@ use colored::Colorize;
 pub fn remove(unwanted_packages: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
     println!("{} {}", "::".bold().green(), "Removing packages...".bold());
 
-    let packages = file::read_packages(get_package_path());
-
-    let mut packages = packages
-        .into_iter()
-        .filter(|p| !p.contains("#") && !p.is_empty())
-        .collect::<Vec<String>>();
+    let mut packages = file::read_packages_filtered(get_package_path());
 
     let input = unwanted_packages.clone().join("\n");
     let args = vec!["--color", "always", "-R", "-"];
@@ -32,7 +27,7 @@ pub fn remove(unwanted_packages: Vec<String>) -> Result<(), Box<dyn std::error::
         packages.retain(|p| *p != unwanted_package);
     }
 
-    file::write_packages(get_package_path(), &packages.join("\n"));
+    file::write_packages(get_package_path(), &packages.join("\n"))?;
 
     Ok(())
 }
