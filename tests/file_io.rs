@@ -2,15 +2,15 @@ use std::fs;
 use std::io::Write;
 use std::path::PathBuf;
 
-fn tempdir() -> PathBuf {
+fn tempdir(test_name: &str) -> PathBuf {
     let mut path = std::env::temp_dir();
-    path.push(format!("ah_test_{}", std::process::id()));
+    path.push(format!("ah_test_{}_{}", std::process::id(), test_name));
     path
 }
 
 #[test]
 fn read_packages_filtered_drops_comments_and_blanks() {
-    let dir = tempdir();
+    let dir = tempdir("read_packages_filtered");
     fs::create_dir_all(&dir).unwrap();
     let pkg_path = dir.join("packages.txt");
 
@@ -31,7 +31,7 @@ fn read_packages_filtered_drops_comments_and_blanks() {
 
 #[test]
 fn write_packages_atomic_writes_content() {
-    let dir = tempdir();
+    let dir = tempdir("write_packages_atomic");
     fs::create_dir_all(&dir).unwrap();
     let pkg_path = dir.join("packages_atomic.txt");
 
