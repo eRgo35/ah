@@ -20,7 +20,7 @@ fn main() {
         }
         Some(cli::Commands::Find(cli::Query { query })) => packages::find(query),
         Some(cli::Commands::ChooseInstall(cli::Query { query })) => packages::choose_install(query),
-        None => packages::full_upgrade(true, cli.yes),
+        None => packages::full_upgrade(cli.yes),
     };
 
     if let Err(err) = result {
