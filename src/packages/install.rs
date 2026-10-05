@@ -1,8 +1,6 @@
 use crate::packages::PACKAGE_MANAGER;
 use crate::{file, packages::get_package_path};
 use colored::Colorize;
-use std::io::Write;
-use std::process::{Command, Stdio};
 
 pub fn install(new_packages: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
     println!(
@@ -18,27 +16,11 @@ pub fn install(new_packages: Vec<String>) -> Result<(), Box<dyn std::error::Erro
         .filter(|p| !p.contains("#") && !p.is_empty())
         .collect::<Vec<String>>();
 
-    let mut child = Command::new(PACKAGE_MANAGER)
-        .arg("--color")
-        .arg("always")
-        .arg("-S")
-        .arg("--needed")
-        .arg("-")
-        .stdin(Stdio::piped())
-        .stdout(Stdio::inherit())
-        .stderr(Stdio::inherit())
-        .spawn()
-        .expect("Failed to execute command");
+    let input = new_packages.clone().join("\n");
+    let args = vec!["--color", "always", "-S", "--needed", "-"];
+    let code = crate::packages::run_command_stdin(PACKAGE_MANAGER, &args, &input)?;
 
-    if let Some(mut stdin) = child.stdin.take() {
-        for new_package in new_packages.clone() {
-            writeln!(stdin, "{}", new_package).unwrap();
-        }
-    }
-
-    let status = child.wait().expect("Failed to wait on child");
-
-    if !status.success() {
+    if code != 0 {
         return Err("Failed to install packages".into());
     }
 

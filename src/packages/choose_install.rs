@@ -1,8 +1,6 @@
 use colored::Colorize;
-use std::io::Write;
-use std::process::{Command, Stdio};
 
-use crate::packages::PACKAGE_MANAGER;
+use crate::packages::{run_command_stdin, PACKAGE_MANAGER};
 
 pub fn choose_install(query: Vec<String>) -> Result<(), Box<dyn std::error::Error>> {
     println!(
@@ -15,26 +13,11 @@ pub fn choose_install(query: Vec<String>) -> Result<(), Box<dyn std::error::Erro
         return Err("No query provided".into());
     }
 
-    let mut child = Command::new(PACKAGE_MANAGER)
-        .arg("--color")
-        .arg("always")
-        .arg("s")
-        .arg("-")
-        .stdin(Stdio::piped())
-        .stdout(Stdio::inherit())
-        .stderr(Stdio::inherit())
-        .spawn()
-        .expect("Failed to execute command");
+    let input = query.join("\n");
+    let args = vec!["--color", "always", "s", "-"];
+    let code = run_command_stdin(PACKAGE_MANAGER, &args, &input)?;
 
-    if let Some(mut stdin) = child.stdin.take() {
-        for word in query.clone() {
-            writeln!(stdin, "{}", word).unwrap();
-        }
-    }
-
-    let status = child.wait().expect("Failed to wait on child");
-
-    if !status.success() {
+    if code != 0 {
         return Err("Failed to install packages".into());
     }
 

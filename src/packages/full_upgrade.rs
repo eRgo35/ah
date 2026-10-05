@@ -1,7 +1,6 @@
 use colored::Colorize;
-use std::process::Command;
 
-use crate::packages::{ask_confirmation, SYSTEM_UPDATER};
+use crate::packages::{ask_confirmation, run_command, SYSTEM_UPDATER};
 
 pub fn full_upgrade(noconfirm: bool) -> Result<(), Box<dyn std::error::Error>> {
     println!(
@@ -14,16 +13,11 @@ pub fn full_upgrade(noconfirm: bool) -> Result<(), Box<dyn std::error::Error>> {
         return Err("Operation aborted".into());
     }
 
-    let noconfirm = if noconfirm { "-y" } else { "" };
+    let noconfirm_arg = if noconfirm { "-y" } else { "" };
 
-    let mut child = Command::new(SYSTEM_UPDATER)
-        .arg(noconfirm)
-        .spawn()
-        .expect("Failed to execute command");
+    let code = run_command(SYSTEM_UPDATER, &[noconfirm_arg])?;
 
-    let status = child.wait().expect("Failed to wait on child");
-
-    if !status.success() {
+    if code != 0 {
         return Err("System upgrade failed".into());
     }
 
