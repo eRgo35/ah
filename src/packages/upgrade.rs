@@ -11,7 +11,7 @@ pub fn upgrade(noconfirm: bool) -> Result<(), Box<dyn std::error::Error>> {
 
     let args: Vec<&str> = vec!["--color", "always", "-Syu"]
         .into_iter()
-        .chain(noconfirm_arg(noconfirm).into_iter())
+        .chain(noconfirm_arg(noconfirm))
         .collect();
 
     let code = run_command(PACKAGE_MANAGER, &args)?;

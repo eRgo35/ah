@@ -1,7 +1,9 @@
 use colored::Colorize;
 
 use crate::file;
-use crate::packages::{ask_confirmation, get_package_path, noconfirm_arg, run_command_stdin, PACKAGE_MANAGER};
+use crate::packages::{
+    ask_confirmation, get_package_path, noconfirm_arg, run_command_stdin, PACKAGE_MANAGER,
+};
 
 pub fn sync(noconfirm: bool) -> Result<(), Box<dyn std::error::Error>> {
     println!("{} {}", "::".bold().green(), "Syncing packages...".bold());
